@@ -63,8 +63,10 @@ export default function SharedText() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto min-h-screen flex flex-col items-center justify-center bg-background px-4 sm:px-0">
-      <Card className="w-full max-w-3xl mx-auto my-8 shadow-lg border-2 border-primary/20 rounded-2xl">
+    <div className="max-w-5xl mx-auto min-h-screen flex flex-col items-center justify-center px-4 sm:px-0">
+      <Card className="w-full max-w-3xl mx-auto my-8 border border-black/5 dark:border-white/10 bg-white dark:bg-[rgba(255,255,255,0.03)] 
+        backdrop-blur-sm rounded-2xl shadow-md transition-shadow duration-300 hover:shadow-lg dark:hover:shadow-[0_0_12px_rgba(255,255,255,0.05)]"
+      >
         <CardHeader className="text-center">
         <CardTitle className="text-xl sm:text-4xl font-bold mt-4 flex gap-4 justify-center items-center">
           <FileText className="w-8 h-8 text-primary" />
@@ -80,7 +82,7 @@ export default function SharedText() {
           </CardDescription>
         </CardHeader>
         <CardContent className="p-6">
-          <div className="bg-muted p-6 rounded-lg whitespace-pre-wrap break-words text-base sm:text-lg leading-relaxed">
+          <div className="bg-muted/30 dark:bg-white/5 p-6 rounded-xl whitespace-pre-wrap break-words text-base sm:text-lg leading-relaxed border border-border">
             {text}
           </div>
         </CardContent>

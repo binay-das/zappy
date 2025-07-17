@@ -2,7 +2,7 @@ import { Separator } from "@/components/ui/separator";
 import { Github, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const Footer1 = () => {
+const Footer = () => {
   const footerLinks = {
     Product: [
       { name: "How it Works", href: "/" },
@@ -27,7 +27,7 @@ const Footer1 = () => {
   return (
     <footer
       id="contact"
-      className="bg-background border-t border-border max-w-5xl mx-auto"
+      className="border-t border-border max-w-5xl mx-auto"
     >
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div aria-label="Footer navigation" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8" >
@@ -110,7 +110,7 @@ const Footer1 = () => {
 
       <Separator />
 
-      <div className="my-4 flex justify-center items-center gap-1 text-muted-foreground text-sm">
+      <div className="mt-4 pb-4 flex justify-center items-center gap-1 text-muted-foreground text-sm">
         Built with love by
         <a
           href="https://github.com/binay-das"
@@ -126,4 +126,4 @@ const Footer1 = () => {
   );
 };
 
-export default Footer1;
+export default Footer;

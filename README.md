@@ -1,69 +1,18 @@
-# React + TypeScript + Vite
+# [Zappy: Modern Text & Code Sharing App](https://zappy-instant-share.netlify.app)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Zappy is a beautiful, privacy-first web app for sharing text and code instantly with anyone. Built with React, TypeScript, Vite, Tailwind CSS, shadcn/ui and supabase, it features a instant and secure text sharing along with stunning gradient background, full dark mode support and a fully responsive and intuitive UI.
 
-Currently, two official plugins are available:
+## ✨ Features
+- **Instant Sharing:** Share text or code with a unique code and link, no sign-up required.
+- **Privacy-First:** All shares auto-expire after 48 hours. No tracking, no ads.
+- **Beautiful UI:** Gradient backgrounds, glassmorphism cards, and modern shadcn components.
+- **Dark Mode:** Seamless theme switching with perfect color adaptation.
+- **Responsive Design:** Mobile-friendly header with hamburger menu and drawer navigation.
+- **Copy-to-Clipboard:** Easily copy codes and links with a single click.
+- **Accessible:** Keyboard navigation and focus states throughout.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+# Open in your browser
+Visit [https://zappy-instant-share.netlify.app/](https://zappy-instant-share.netlify.app)
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```

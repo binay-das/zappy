@@ -1,19 +1,22 @@
-"use client";
-
 import { useState } from "react";
-
 import { toast } from "sonner";
-import { Share2, CheckCircle } from "lucide-react";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Share2, CheckCircle, ArrowRight } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import generateCode from "@/lib/generateCode";
 import { supabase } from "@/lib/supabaseClient";
 import { CopyButton } from "@/components/CopyButton";
 import { Link } from "react-router-dom";
-
+import { Input } from "@/components/ui/input";
 
 export default function ShareText() {
   const [message, setMessage] = useState<string>("");
@@ -21,7 +24,6 @@ export default function ShareText() {
   const [expiryTime, setExpiryTime] = useState<Date | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [charCount, setCharCount] = useState<number>(0);
-  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
   const handleShare = async () => {
     if (!message.trim()) {
@@ -30,32 +32,29 @@ export default function ShareText() {
     }
     setLoading(true);
     try {
-      if (!message || message.trim() === "") {
-        toast.error("Text cannot be empty");
-        return;
-      }
-      const code = generateCode();
+      const generatedCode = generateCode();
       const { error } = await supabase.from("shared_texts").insert([
         {
-          code,
+          code: generatedCode,
           content: message,
         },
       ]);
+
       if (error) {
         toast.error(error.message || "Error, couldn't share this");
         return;
       }
 
-      setMessage("");
-      setCharCount(0);
-      toast.success(
-        "Successfully shared! Get the code to access it for the next 48 hrs."
-      );
       const now = new Date();
       const expiry = new Date(now.getTime() + 48 * 60 * 60 * 1000);
       setExpiryTime(expiry);
-      setCode(code);
-      setDialogOpen(false);
+      setCode(generatedCode);
+      setMessage("");
+      setCharCount(0);
+
+      toast.success(
+        "Successfully shared! Get the code to access it for the next 48 hrs."
+      );
     } catch (error: any) {
       console.error("Error sharing:", error);
       toast.error(error.response?.data?.error || "Error sharing your text");
@@ -65,8 +64,10 @@ export default function ShareText() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto min-h-screen flex flex-col items-center justify-center bg-background px-4 sm:px-0">
-      <Card className="w-full max-w-3xl mx-auto my-8 shadow-lg border-2 border-primary/20 rounded-2xl">
+    <div className="max-w-5xl mx-auto min-h-screen flex flex-col items-center justify-center px-4 sm:px-0">
+      <Card className="w-full max-w-3xl mx-auto my-8 border border-black/5 dark:border-white/10 rounded-2xl shadow-bg-white dark:bg-[rgba(255,255,255,0.03)] 
+        backdrop-blur-sm transition-shadow duration-300 hover:shadow-lg dark:hover:shadow-[0_0_12px_rgba(255,255,255,0.05)]"
+      >
         <CardHeader className="text-center">
           <CardTitle className="text-xl sm:text-4xl font-bold mt-4 flex gap-4 justify-center items-center">
             <Share2 className="w-8 h-8 text-primary" />
@@ -75,124 +76,109 @@ export default function ShareText() {
           <CardDescription className="text-lg text-muted-foreground mt-2">
             Write something and share it with the world securely.
           </CardDescription>
-          <Link
-            to={"/text/code"}
-            className="text-muted-foreground text-right underline text-sm italic"
-          >
-            Have a code? Click here to access it
-          </Link>
         </CardHeader>
 
         {code ? (
-          <CardContent className="flex flex-col items-center gap-4 animate-fade-in p-6 bg-primary/10 rounded-lg m-6">
-            <CheckCircle className="w-16 h-16 text-green-500" />
-            <h3 className="text-2xl font-semibold text-green-700">
+          <CardContent className="flex flex-col items-center gap-6 p-8">
+            <CheckCircle className="w-16 h-16 text-green-500 mb-2" />
+            <h3 className="text-2xl font-semibold text-green-700 mb-2">
               Successfully Shared!
             </h3>
-            <p className="text-muted-foreground text-center">
+            <p className="text-muted-foreground text-center mb-2">
               Here is your unique code and link. Share it with anyone.
             </p>
-            <div className="flex items-center gap-3 mt-4">
-              <span className="font-mono text-lg bg-background px-4 py-2 rounded-lg border">
-                {code}
-              </span>
-              <CopyButton text={code} />
+            <div className="flex flex-col sm:flex-row gap-4 w-full justify-center items-center">
+              <div className="flex-1 flex flex-col items-center">
+                <Label className="mb-1 text-sm">Code</Label>
+                <div className="flex gap-2 items-center w-full">
+                  <Input
+                    readOnly
+                    value={code}
+                    className="font-mono text-lg text-center cursor-pointer bg-background border border-primary/30 px-4 py-2 rounded-lg w-full"
+                    onClick={(e) => (e.target as HTMLInputElement).select()}
+                  />
+                  <CopyButton text={code} />
+                </div>
+              </div>
+              <div className="flex-1 flex flex-col items-center">
+                <Label className="mb-1 text-sm">Link</Label>
+                <div className="flex gap-2 items-center w-full">
+                  <Input
+                    readOnly
+                    value={`${window.location.origin}/text/${code}`}
+                    className="font-mono text-base cursor-pointer bg-background border border-primary/30 px-4 py-2 rounded-lg w-full"
+                    onClick={(e) => (e.target as HTMLInputElement).select()}
+                  />
+                  <CopyButton text={`${window.location.origin}/text/${code}`} />
+                </div>
+              </div>
             </div>
-            <div className="flex items-center gap-3 mt-2">
-              <span className="font-mono text-base bg-background px-4 py-2 rounded-lg border truncate">
-                {`${window.location.origin}/text/${code}`}
-              </span>
-              <CopyButton text={`${window.location.origin}/text/${code}`} />
-            </div>
-            <span className="text-sm text-muted-foreground mt-4 text-center">
+            <span className="text-xs text-muted-foreground mt-2 text-center">
               This text will be automatically deleted after <b>48 hours</b> (
               {expiryTime ? expiryTime.toLocaleString() : ""}).
             </span>
-            <Button onClick={() => setCode(null)} className="mt-4">
+            <Button
+              onClick={() => setCode(null)}
+              className="mt-4 w-full sm:w-auto"
+            >
               Share Another Text
             </Button>
           </CardContent>
         ) : (
-          <CardContent className="p-6">
-            <div className="grid w-full gap-4">
-              <Label htmlFor="message" className="text-lg font-medium">
-                Your Message
-              </Label>
-              <Textarea
-                placeholder="Type or paste your message here..."
-                id="message"
-                className="min-h-[200px] text-base p-4 rounded-lg border-2 focus:border-primary transition-colors"
-                value={message}
-                onChange={(e) => {
-                  setMessage(e.target.value);
-                  setCharCount(e.target.value.length);
-                }}
-                maxLength={5000}
-                disabled={loading}
-              />
-              <div className="text-right text-sm text-muted-foreground">
-                {charCount}/5000
+          <CardContent className="p-8">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleShare();
+              }}
+              className="grid w-full gap-6"
+            >
+              <div>
+                <Label
+                  htmlFor="message"
+                  className="text-lg font-medium mb-2 block"
+                >
+                  Your Message
+                </Label>
+                <Textarea
+                  placeholder="Type or paste your message here..."
+                  id="message"
+                  className="min-h-[200px] text-base p-4 rounded-xl border border-border bg-muted/30 focus:border-primary transition-colors backdrop-blur-sm"
+                  value={message}
+                  onChange={(e) => {
+                    setMessage(e.target.value);
+                    setCharCount(e.target.value.length);
+                  }}
+                  maxLength={5000}
+                  disabled={loading}
+                  required
+                />
+                <div className="text-right text-xs text-muted-foreground mt-1">
+                  {charCount}/5000
+                </div>
               </div>
-            </div>
+              <Button
+                type="submit"
+                size="lg"
+                className="rounded-full group text-lg px-8 py-6 w-full sm:w-auto"
+                disabled={loading || !message.trim()}
+              >
+                {loading ? "Sharing..." : "Share"}
+                <Share2 className="w-5 h-5 ml-2" />
+              </Button>
+            </form>
           </CardContent>
         )}
 
-        {!code && (
-          <CardFooter className="flex justify-end p-6">
-            <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-              <DialogTrigger asChild>
-                <Button
-                  size="lg"
-                  className="rounded-full group text-lg px-8 py-6"
-                  disabled={loading || !message.trim()}
-                >
-                  <Share2 className="w-5 h-5 mr-2" />
-                  Share
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle className="text-2xl font-bold">
-                    Confirm Your Share
-                  </DialogTitle>
-                  <DialogDescription className="mt-2 text-muted-foreground">
-                    This shared text will be automatically deleted from our
-                    servers after <b>48 hours</b>. Are you sure you want to
-                    proceed?
-                  </DialogDescription>
-                </DialogHeader>
-                <DialogFooter className="mt-6">
-                  <DialogClose asChild>
-                    <Button variant="outline">Cancel</Button>
-                  </DialogClose>
-                  <Button
-                    onClick={handleShare}
-                    disabled={loading}
-                    className="bg-primary hover:bg-primary/90"
-                  >
-                    {loading ? "Sharing..." : "Confirm & Share"}
-                  </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-          </CardFooter>
-        )}
+        <CardFooter className="flex justify-center p-6">
+          <Link
+            to="/text/code"
+            className="text-muted-foreground hover:text-primary transition-colors"
+          >
+            Have a code? Enter it here <ArrowRight className="inline w-4 h-4" />
+          </Link>
+        </CardFooter>
       </Card>
-      {/* <style jsx global>{`
-        @keyframes fade-in {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: none;
-          }
-        }
-        .animate-fade-in {
-          animation: fade-in 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-      `}</style> */}
     </div>
   );
 }
