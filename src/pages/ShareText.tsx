@@ -3,12 +3,12 @@
 import { useState } from "react";
 
 import { toast } from "sonner";
-import { Share2, Link as LinkIcon, CheckCircle } from "lucide-react";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../components/ui/card";
-import { Button } from "../components/ui/button";
-import { Label } from "../components/ui/label";
-import { Textarea } from "../components/ui/textarea";
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "../components/ui/dialog";
+import { Share2, CheckCircle } from "lucide-react";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import generateCode from "@/lib/generateCode";
 import { supabase } from "@/lib/supabaseClient";
 import { CopyButton } from "@/components/CopyButton";
@@ -16,12 +16,12 @@ import { Link } from "react-router-dom";
 
 
 export default function ShareText() {
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState<string>("");
   const [code, setCode] = useState<string | null>(null);
   const [expiryTime, setExpiryTime] = useState<Date | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [charCount, setCharCount] = useState(0);
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [charCount, setCharCount] = useState<number>(0);
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
   const handleShare = async () => {
     if (!message.trim()) {
