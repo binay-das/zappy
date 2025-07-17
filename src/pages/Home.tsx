@@ -11,8 +11,6 @@ import {
   Share2,
   Link,
   FileText,
-  CheckCircle,
-  Star,
   Users,
   Timer,
   Lock,
