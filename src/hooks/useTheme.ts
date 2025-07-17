@@ -29,5 +29,5 @@ export function useTheme() {
     }
   }
 
-  return { setTheme }
+  return { theme, setTheme }
 }
